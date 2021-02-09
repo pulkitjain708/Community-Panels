@@ -1,0 +1,61 @@
+<%-include("header")%>
+<%-include("navbar")%>
+<%-include("commSidebar")%>
+<%-include("communityHeader")%>
+<div class ='container'>
+    <div class="row">
+        <div class="col-8">Manage Community</div>
+        <div class="col-2">Edit Community</div>
+        <div class="col-2">Invite Users</div>
+    </div>
+    <hr>
+    <div class="row" > 
+            <div class="col-5" style="background:#ecf0f1;width:30%;height:20%">
+                <div class="row"><a onclick='showRequests("<%-cid%>")'>Requests</a></div>
+                <div class="row"><a onclick=''>Invites</a></div>
+            </div>
+            <div id="appendablediv" class="col-7">
+                 
+            </div>
+        </div>
+    </div>
+<script>
+    function showRequests(cid){
+        $.post("/showRequests",{
+            id:cid
+        },(data,status)=>{
+            console.log(data)
+              $("#appendablediv").html("");
+              for(i=0;i<data.request.length;i++){
+                  $("#appendablediv").append(`
+                      <div class="container">
+                        <div class="row">
+                            <div class="col"><img height="30px" width="30px" src=../${data.request[i].profile}></div>
+                            <div class="col"><p>${data.request[i].username}</p></div>
+                            <div class="col"><button onclick='acceptRequest("${cid}","${data.request[i]._id}")'>Accept</button><button onclick='removeRequest("${cid}","${data.request[i]._id}")'>Reject</button></div>
+                            </div>
+                        </div>
+                  `);
+              }
+        })
+    }
+    function removeRequest(id,pid){
+        $.post("/removeRequest",{
+            cid:id,
+            perid:pid
+        },(data,status)=>{
+            if(status=="success")
+            alert("LOLL removed..");
+        })
+    }
+    function acceptRequest(id,pid){
+        $.post("/acceptRequest",{
+            cid:id,
+            perid:pid
+        },(data,status)=>{
+            if(status=="success")
+            alert("LOLL added..");
+        })
+    }
+</script>
+<%-include('footer')%>

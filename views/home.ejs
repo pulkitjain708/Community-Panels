@@ -1,0 +1,84 @@
+<%-include('header')%>
+<%-include('navbar')%>
+<!--Simple code for including files of sidebar-->
+    <%if(userStatus==1){%>
+    <%-include('commSidebar')%>
+    <%}else{%>
+    <%-include('sidebar')%>
+    <%}%>
+<br><br><br><br>
+    <div class="container shadow-lg p-3 mb-5 bg-white rounded">
+        <div style="border:1px solid black" class="imgsize">
+               <img class="imgsize" src="<%=link%>">
+        </div>
+        <br>
+        <%if(userStatus==1){%>
+        <%-"<a href='/editInfo' class='btn btn-primary'>Edit</a>"%>
+        <%}%>
+   <div class="row">
+       <div class="col">
+            <div class="card shadow p-3 mb-5 bg-white rounded ">
+                    <div class="card-header">
+                      Email
+                    </div>
+                    <div class="card-body">
+                      <h3 class="card-title"><%=data.email%></h3>
+                    </div>
+                  </div>
+       </div>
+       <div class="col"><div class="card shadow p-3 mb-5 bg-white rounded">
+            <div class="card-header">
+                      Gender
+            </div>
+            <div class="card-body">
+              <h3 class="card-title"><%=data.gender%></h3>
+            </div>
+          </div></div>
+   </div>
+   <div class="row">
+        <div class="col">
+                <div class="card shadow p-3 mb-5 bg-white rounded">
+                        <div class="card-header">
+                          Name
+                        </div>
+                        <div class="card-body">
+                          <h3 class="card-title"><%=data.username%></h3>
+                        </div>
+                    </div>
+        </div>
+       <div class="col">
+            <div class="card shadow p-3 mb-5 bg-white rounded">
+                    <div class="card-header">
+                      City
+                    </div>
+                    <div class="card-body">
+                      <h3 class="card-title"><%=data.city%></h3>
+                    </div>
+                  </div>
+       </div>
+    </div>
+   
+    <div class="row">
+        <div class="col">
+                <div class="card shadow p-3 mb-5 bg-white rounded" >
+                        <div class="card-header">
+                          D.O.B
+                        </div>
+                        <div class="card-body">
+                          <h3 class="card-title"><%=data.dob%></h3>
+                        </div>
+                      </div>
+        </div>
+       <div class="col">
+            <div class="card shadow p-3 mb-5 bg-white rounded ">
+                    <div class="card-header">
+                    Phone
+                    </div>
+                    <div class="card-body">
+                      <h3 class="card-title"><%=data.phone%></h3>
+                    </div>
+                  </div>
+       </div>
+    </div>
+    </div>
+    

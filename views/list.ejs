@@ -1,0 +1,61 @@
+<%-include('header')%>
+<%-include('navbar')%>
+<%-include('commSidebar')%>
+   <div class="flow-layout">
+    <div class="col-sm-12" style="top:55px;position:relative;height:40px;left:42px;background:skyblue">
+                 <a href="/cp" style="left:150px;position:relative;border:solid white 1px;border-radius:0px" class="btn"><i  class="fas fa-users"></i></a>
+                 <a href="#" id='srchbtn' style="left:150px;position:relative;border:solid white 1px;border-radius:0px" class="btn"><i  class="fas fa-search"></i></a>
+                 <input type="text" id="searchComm" style="position:relative;top:5px;float:right;width:342px" placeholder="Search Community"> 
+             </div>
+             </div>
+             <div id="appendable" class="container" style="position:relative;top:100px;left:80px;width:70%;">
+             </div>
+             <script>
+             //when dom is ready
+                          $("#searchComm").change(()=>{
+             $("#appendable").html("");
+                    $.post("/commChangeList",{value:$("#searchComm").val()},(data,status)=>{
+                        for(i=0;i<data.length;i++){
+                            console.log(data[i]);
+                    $("#appendable").append("<div class='card w-100'><div class='card-body'><img class='shadow' src='community.jpg' height='50px' width='50px'><h5 style='position:absolute;top:30px;left:100px' class='card-title'>"+data[i].name+"</h5></div><div style='width:150px;position:absolute;top:30px;left:800px' id='"+data[i].name+"'></div></div><br>");
+                   if(data[i].rule=="Direct")
+                     $("#"+data[i].name).html("<button onclick=joinFun('"+data[i]._id+"') class='btn btn-primary'>Join Now</button>")
+                     else
+                     $("#"+data[i].name).html("<button class='btn btn-primary'>Ask To Join</button>")
+                  }
+                });
+         });
+                $(document).ready(()=>{
+             $.post("/commChangeList",{value:"null"},(data,status)=>{
+                 $("#appendable").html("");
+                        for(i=0;i<data.length;i++){
+                            console.log(data[i]);
+                    $("#appendable").append("<div class='card w-100'><div class='card-body'><img class='shadow' src='community.jpg' height='50px' width='50px'><h5 style='position:absolute;top:30px;left:100px' class='card-title'>"+data[i].name+"</h5></div><div style='width:150px;position:absolute;top:30px;left:800px' id='"+data[i].name+"'></div></div><br>");
+                     if(data[i].rule=="Direct")
+                     $("#"+data[i].name).html("<button onclick=joinFun('"+data[i]._id+"') class='btn btn-primary'>Join Now</button>")
+                     else
+                     $("#"+data[i].name).html("<button onclick=joinPer('"+data[i]._id+"') class='btn btn-primary'>Ask To Join</button>")
+                 }
+                });
+                });
+                function joinFun(data){
+                 var a=   $.post("/join",{
+                        communityId:data
+                    },(data,status)=>{
+                        if(status=="success"){
+                            window.location.reload()
+                        }
+                    });
+                }
+
+                function joinPer(data){
+                    $.post("/joinPermission",{
+                        comId:data
+                    },(data,status)=>{
+                        if(status=="success"){
+                            console.log("Request sent to Community Owner")
+                        }
+                    })
+                }
+             </script>
+<%-include('footer')%>

@@ -1,0 +1,39 @@
+<%-include("header")%>
+<%-include("navbar")%>
+<%-include("sidebar")%>
+<%-include("sendReminderModal")%>
+<%-include("updateModal")%>
+<br><br><br><br>
+       <div class="container">
+         <button type="button" class="btn btn-dark" disabled>User List</button>
+         <button type="button" class="btn btn-dark" style="left:300px" id="refresh">Refresh</button>
+         <select class="" id="statusFilter" name="statusFilter" style="float:right;height:37px;width:100px;background:black;color:white;">
+      <option name="user" value="">All</option>
+          <option name="pending" value="pending">Pending</option>
+      <option name="confirmed" value="confirmed">Confirmed</option>
+      </select>
+      <select class=" " id="roleFilter" name="filter" style="float:right;height:37px;width:190px;background:black;color:white;">
+      <option name="user" value="">All</option>
+        <option name="user" value="admin">Admins</option>
+          <option name="admin" value="user">Users</option>
+          <option name="commuity manager" value="commuity builder">Community Builder</option>
+      </select>
+       </div>
+       <br>
+<div class="container">
+     <table id="example" class="display" style="width:100%">
+         <thead>
+            <tr>
+                <th>Email</th>
+                <th>phone</th>
+                <th>city</th>
+                <th>status</th>
+                <th>role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+     </table>           
+            </div>
+            <%-include('userscript')%>
+             <%-include("openingModalScript")%>
+            <%-include('footer')%>

@@ -1,0 +1,28 @@
+<script>
+     $(document).on('click', "button[flag='mail']", function() {
+          email=$(this).parent().prev().prev().prev().prev().prev().text();
+         $("#emailPop").val(email);
+       $("#subject").val("This email is from cq");
+          });
+       $(document).on('click', "button[flag='update']", function() {
+          email=$(this).parent().prev().prev().prev().prev().prev().text();
+             $("#modaltitle").text("Update "+email);
+             $("#phone").val($(this).parent().prev().prev().prev().prev().text());
+              $("#city").val($(this).parent().prev().prev().prev().text());
+               $("#username").val(email);
+          });
+       $(document).on("click","button[flag='activation']",function(){
+           email=$(this).parent().prev().prev().prev().prev().prev().text();
+      var x=confirm("are you sure to change Activation")
+      if(x){
+         $.post("/updateActivation",{"e":email},function(data,status){
+            if(status=="success"){ $("#refresh").click(); }
+         });
+           alert("Activation Status changed..");
+         }
+         else{
+         alert("You denied Action..");
+         }
+         });
+     
+      </script>

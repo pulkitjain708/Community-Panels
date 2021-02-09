@@ -1,0 +1,52 @@
+<%-include("header")%>
+<style>
+body{
+  background-color: #F3F3F3;
+}
+.center {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  left: 50%;
+  top: 40%;
+  margin-top: -15px;   /* = -height / 2   */
+  margin-left: -100px; /* = -width / 2    */
+  position: fixed;     /* Fixed is better */
+  }
+  #heading {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    left: 50%;
+    top: 30%;
+    font-size: 30px;
+    color: #ADABAB;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    margin-top: -15px;   /* = -height / 2   */
+    position: fixed;     /* Fixed is better */
+    margin-left: -180px; /* = -width / 2    */
+    }
+    @media(max-width:768px){
+      #heading{
+        font-size:20px;
+      }
+    }
+</style>
+
+</head>
+<body>
+  <div class="center2">
+    
+      <p id="heading">Switching User to Admin</p>
+    
+  </div>
+
+<div class="center">
+  <img src="loading.gif">
+</div>
+
+<script>
+    setTimeout(function(){ window.location.replace("/home"); }, 1000);
+</script>
+</body></html>

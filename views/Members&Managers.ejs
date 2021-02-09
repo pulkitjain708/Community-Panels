@@ -1,0 +1,36 @@
+<%-include("header")%>
+<%-include("navbar")%>
+<%-include("commSidebar")%>
+<%-include("communityHeader")%>
+<script>
+data=<%-JSON.stringify(data)%>
+console.log(data);
+// console.log(data[0].members);
+// console.log(data[0].ownerString);
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h5 id="managers">Managers</h5>
+        </div>
+        <div class="col">
+            <h5 id="members"> Members (<%-data[0].members.length%>)</h5>
+        </div>
+    </div>
+    <div class='container' id="appendable">
+        
+    </div>
+</div>
+<script>
+$("#managers").click(()=>{
+    $("#appendable").text(" ");
+    $("#appendable").html("<h5><%-data[0].ownerString%></h5>");
+});
+var data=data[0].members;
+$("#members").click(()=>{
+    $("#appendable").text("");
+    for(i=0;i<data.length;i++)
+    $("#appendable").append("<div class='row'><div class='col'><img onclick=window.location.href='/viewprofile/"+data[i]._id+"' class='shadow' height='80px' width='80px' src=../"+data[i].profile+"></div><div class='col'><h4>"+data[i].username+"</h4></div></div><hr><br>");
+});
+</script>
+<%-include("footer")%>

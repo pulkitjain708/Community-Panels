@@ -1,0 +1,57 @@
+<%-include("header")%>
+<%-include("navbar")%>
+<%-include("commSidebar")%>
+<%-include("communityHeader")%>
+<div class="container">
+        <div class="row">
+            <div class="col-5" style="border-right:1px solid grey;">
+            <div class="card" >
+                <div class="card-header">
+                    Members <a  id='viewall' style="position:relative;float:right;" href="">View All</a>
+                </div>
+                <div id="images-appendable" class="card-body">
+                </div>
+                <div class="card-footer">
+                    <a id="memcount" href="/">()Members</a> <a style="position:relative;float:right;" href="/">Leave Community</a>
+                </div>
+            </div>
+            </div>
+            <div class="col-7">
+                 <div class="card">
+                     <div class="card-header">
+                        <h4 style="position:relative;left:40%">Details</h4>
+                     </div>
+                     <div class="card-body">
+                         <p id="description" style="position:relative;top:50%;left:45%;">No desc</p>
+                     </div>
+                 </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-5">
+             <div class="card">
+                 <div class="card-header">
+                     Community Managers
+                 </div>
+                 <div class="card-body">
+                     <img src="">
+                     <h5 id="namess">Name</h5>
+                 </div>
+             </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    data=<%-JSON.stringify(data)%>
+    console.log(data);
+    $(()=>{
+        $("#viewall").attr("href",'/communitymembers/'+data._id);
+       for(i=0;i<data.members.length;i++)
+        $("#images-appendable").append("<img data-toggle='tooltip' data-placement='right' title='"+data.members[i].username+"' height='50px' width='50px' src='../"+data.members[i].profile+"'>&nbsp;&nbsp;&nbsp;")
+        $("#description").text(data.desc);
+ $("#memcount").text(data.members.length + " Members");
+ $("#namess").text(data.ownerString);
+    });
+    </script>
+    <%-include("footer")%>

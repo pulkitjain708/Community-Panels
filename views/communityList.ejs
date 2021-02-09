@@ -1,0 +1,153 @@
+<%-include("header")%>
+<%-include("navbar")%>
+<%-include("sidebar")%>
+<div class="container" style="position:relative;top:65px">
+   <button type="button" class="btn btn-dark" disabled></dt>Community List</dt></button>
+<input type="button" id="refresh_community" value="refresh"style="background:black;color:white;height:38px;width:90px">
+ <select class=" " id="ruleFilter" name="filter" style="float:right;height:37px;width:190px;background:black;color:white;">
+      <option  value="">All</option>
+        <option name="Direct" value="Direct">Direct</option>
+          <option name="Permission" value="Permission">Permissions</option>
+      </select>
+<div class="modal fade" id="InfoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Community Details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <img src="community.jpg" height="60px" widht="60px">
+           <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Community Name:</label>
+            <input type="text" class="form-control" id="comm-name" disabled>
+          </div>
+           <div class="form-group">
+            <label for="message-text" class="col-form-label">Description:</label>
+            <textarea height="100px"class="form-control" id="desc-text" disabled></textarea>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="modal fade" id="UpdateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update Community</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <img src="community.jpg" height="60px" widht="60px">
+           <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Community Name:</label>
+            <input type="text" class="form-control" id="updatename">
+          </div>
+           <div class="form-group">
+            <label for="message-text" class="col-form-label">Description:</label>
+            <textarea height="100px"class="form-control" id="updatedesc"></textarea>
+          </div>
+          <select class="custom-select" id="updateRule">
+  <option selected>Choose Rule</option>
+  <option value="Permission">Permission</option>
+  <option value="Direct">Direct</option>
+</select>
+ <select class="custom-select" id="updateAct">
+  <option selected>Update Activation</option>
+  <option value="Activated">Activated</option>
+  <option value="Deactivated">Deactivated</option>
+</select>
+  <textarea id="txtid" style="display:none"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="updatecomm" class="btn btn-secondary" data-dismiss="modal">Update</button>
+      </div>
+    </div>
+  </div>
+</div>
+       <table id="CommunityTable" class="display" style="width:100%">
+         <thead>
+            <tr>
+                <th>Community Name</th>
+                <th>Membership Rule</th>
+                <th>Community Owner</th>
+                <th>Create Date</th>
+                <th>Actions</th>
+                <th>Community Pic</th>
+            </tr>
+        </thead>
+     </table> 
+     <script>
+             $('#CommunityTable').DataTable( {
+    serverSide: true,
+    processing: true,
+    paging:true,
+     ajax: {
+     url: '/communityList',
+         type: 'POST',
+         dataSrc:"data",
+         data:function (d) {
+             d.rule=$("#ruleFilter").val();
+         }
+    }
+    ,columns: [
+        { "data": 'name'  },
+        { "data": 'rule' },
+        { "data": "ownerString"},
+        { "data": "doc"},
+        {"data" :null},
+        {"data" : null}
+    ],
+    columnDefs:[{
+        "targets":4,
+        "data":null,
+        "render":function(data){
+            return "<button cid='"+data._id+"'data-toggle='modal' data-target='#UpdateModal' flag='update'  desc='"+data.desc+"' cname='"+data.name+"'><i class='fas fa-edit'></i></button><button name="+ data.name +" data='" + data.desc + "'flag='info' data-toggle='modal' data-target='#InfoModal'><i class='fas fa-info'></i></button>"
+        }
+    },
+    {
+        "targets":5,
+        "data":null,
+        "render":function(data){
+          if(data.activation=="Activated"){
+            return "<img src='community.jpg' style='border-style:solid;border:5;border-color:green' height='50px' width='50px'>"
+          }
+          else  return "<img src='community.jpg' style='border-style:solid;border:5;border-color:red;' height='50px' width='50px'>"
+        }
+        }
+    ]
+} );
+   $("#refresh_community").click(function(){
+      table= $("#CommunityTable").DataTable();
+      table.ajax.reload();
+   });
+   $(document).on("click","button[flag='info']",function(){
+         $("#desc-text").val($(this).attr("data"));
+            $("#comm-name").val($(this).attr("name"));
+   });
+      $(document).on("click","button[flag='update']",function(){
+         $("#updatedesc").val($(this).attr("desc"));
+            $("#updatename").val($(this).attr("cname"));
+           $("#txtid").val($(this).attr("cid"))
+   });
+$("#updatecomm").click(function(){
+    $.post("/updateCommunity",{
+              name:$("#updatename").val(),
+              desc:$("#updatedesc").val(),
+              rule:$("#updateRule").val(),
+              _id:$("#txtid").val(),
+              activation:$("#updateAct").val()
+            },function(err,status){
+              if(status=="success") $("#refresh_community").click();
+            });
+
+});
+     </script>
+     <%-include("footer")%>

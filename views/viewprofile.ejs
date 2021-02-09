@@ -1,0 +1,54 @@
+<%-include("header")%>
+<%-include("navbar")%>
+<%-include("commSidebar")%>
+<br><br><br><br><br>
+<div class="container shadow-lg p-3 mb-5 bg-white rounded">
+        <div style="border:1px solid black" class="imgsize">
+               <img class="imgsize" src="../<%=data.profile%>">
+        </div>
+        <br>
+   <div class="row">
+       <div class="col">
+            <div class="card shadow p-3 mb-5 bg-white rounded ">
+                    <div class="card-header">
+                  Name
+                    </div>
+                    <div class="card-body">
+                      <h3 class="card-title"><%=data.username%></h3>
+                    </div>
+                  </div>
+       </div>
+       <div class="col"><div class="card shadow p-3 mb-5 bg-white rounded">
+            <div class="card-header">
+                      Gender
+            </div>
+            <div class="card-body">
+              <h3 class="card-title"><%=data.gender%></h3>
+            </div>
+          </div></div>
+   </div>
+   <div class="row">
+        <div class="col">
+                <div class="card shadow p-3 mb-5 bg-white rounded">
+                        <div class="card-header">
+                        DOB
+                        </div>
+                        <div class="card-body">
+                          <h3 class="card-title"><%=data.dob%></h3>
+                        </div>
+                    </div>
+        </div>
+       <div class="col">
+            <div class="card shadow p-3 mb-5 bg-white rounded">
+                    <div class="card-header">
+                      City
+                    </div>
+                    <div class="card-body">
+                      <h3 class="card-title"><%=data.city%></h3>
+                    </div>
+                  </div>
+       </div>
+    </div>
+    </div>
+    </div>
+    <%-include("footer")%>

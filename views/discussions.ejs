@@ -1,0 +1,97 @@
+<%-include("header")%>
+<%-include("navbar")%>
+<%-include("commSidebar")%>
+<%-include("communityHeader")%>
+<button id="modalviewer" data-toggle="modal" data-target="#modal"></button>
+<!--------------------Modal---------------------------->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Title">Comments to Discussion</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="body" class="modal-body">
+        
+      </div>
+    </div>
+  </div>
+</div>
+<!------------------Modal---------------------------------->
+<div class="container">
+<div class="card" style="width: 70rem;">
+  <div class="card-header">
+   Start a Discussion
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><input onclick="$('#disdet').show()" class="form-control form-control-lg" id="dit" type="text" placeholder="Enter a Title"></li>
+   <div id="disdet" style="display:none">
+   <ul class="list-group list-group-flush">
+   <li class="list-group-item"><input class="form-control form-control-lg" id="details" type="text" placeholder="Enter Discussion details"></li>
+   <li class="list-group-item"><button id="postDiscussion" style ="float:right" type="button" class="btn btn-primary">Post</button></li>
+   </ul>
+   </div>
+  </ul>
+</div>
+    </div>
+    <br>
+    <div id="discussionsbar" class="container"></div>
+    <script>
+    commid=<%-JSON.stringify(cid)%>
+    $(document).ready(()=>{
+      $.post("/getDiscussions",{commid:<%-JSON.stringify(cid)%>},(data,status)=>{
+         console.log(data);
+         for(i=0;i<data.length;i++){
+           $("#discussionsbar").append("<div class='card' style='width:70rem;'> <div class='card-body'><h5 class='card-title'>"+data[i].title+"</h5><h6 class='card-subtitle mb-2 text-muted'>Posted by "+ data[i].poster + " on " + data[i].date + ' at ' + data[i].time +"</h6> <p class='card-text'>"+data[i].details+"</p><h6 class='card-subtitle mb-2 text-muted'><i onclick=displayComments('"+commid+"','"+data[i]._id+"') class='fas fa-comments'>&nbsp;"+data[i].comments.length+" Comments</i></h6></div><div class='card-footer'><form class='form-inline'><input type='text' class='form-control col-11' id='"+data[i]._id+"' placeholder='Post a Comment'>&nbsp;<button onclick=postComment('"+commid+"','"+data[i]._id+"') type='button' class='btn btn-primary mb-2'>Post</button></form></div></div><br>");
+         }
+      });
+    });
+       $("#postDiscussion").click(()=>{
+         $.post("/addDiscussion",{
+              title:$("#dit").val(),
+              details:$("#details").val(),
+              commid:<%-JSON.stringify(cid)%>
+         },(data,status)=>{
+           if(status=="success") alert("Thread Added");
+         });
+       });
+       function postComment(cid,did){
+         text=$("#"+did).val();
+        $.post("/addComment",{
+          comment:text,
+          comid:cid,
+          disid:did
+        },(data,status)=>{
+          if(status="success"){
+            alert("Your Comment has been posted");
+          }
+        });
+       }
+    function displayComments(c,d){
+             $.post("/viewComments",{
+            comid:c,
+            disid:d
+             },(data,status)=>{
+               console.log(data);
+               $("#body").html("");
+                   for(i=0;i<data.length;i++){
+                     $("#body").append(`
+                         <div class="row">
+                                 <div class="col-4">
+                                 <img src=../${data[i].cpic} height="35px" width="35px">
+                                 </div>
+                                      <div class="col-6">
+                                      <p>${data[i].commenter}     ${data[i].time}</p>
+                                      </div>
+                                  <input class="form-control" type="text" value="${data[i].text}" disabled>
+                         </div>
+                         <hr>
+                     `);
+                   }
+                $("#modalviewer").click();
+             });
+    }
+    </script>
+<%-include("footer")%>

@@ -1,0 +1,131 @@
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+            <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+ <script>
+ var selectedStatus,selectedRole,statusFilter,roleFilter;
+     $(function(){
+            $('#example').DataTable( {
+    serverSide: true,
+    processing: true,
+    paging:true,
+     ajax: {
+     url: '/userList',
+         type: 'POST',
+         dataSrc:"data",
+         "data": function(d){
+             {
+                 d.role=roleFilter,
+                 d.status=statusFilter
+             }
+         }
+    }
+    ,columns: [
+        { "data": 'email'  },
+        { "data": 'phone' },
+        { "data": "city"},
+        { "data": "status"},
+        {"data" : "role"},
+        {"data":null}
+    ],
+    columnDefs:[
+        {"targets":-1,
+        "data":null,
+        "render":function(data,type,row,meta){
+                  if(data.activation=='activated')
+                  return   "<button flag='mail' data-target='#modal' data-toggle='modal' style='background:black;'><span class='fas fa-envelope' style='color:#fff'></span></button><button flag='update' data-target='#updatemodal' data-toggle='modal'style='background:blue'><span style='color:white'class='fa fa-edit'></span></button><button flag='activation'  style='background:red'><span style='color:white' class='fas fa-times'></span></button>"
+                   else  
+                   return   "<button flag='mail' data-target='#modal' data-toggle='modal' style='background:black;'><span class='fas fa-envelope' style='color:#fff'></span></button><button flag='update' data-target='#updatemodal' data-toggle='modal'style='background:blue'><span style='color:white'class='fa fa-edit'></span></button><button flag='activation' style='background:yellow'><span style='color:white' class='fa fa-check-circle'></span></button>"
+       }                   
+        }
+    ]
+} );   
+       $("#refresh").click(function(){
+           var Table = $('#example').DataTable( );
+                Table.ajax.reload();
+       });
+        });
+        //data-target='#modal' data-toggle='modal'
+        //"<button style='background:black;'><span class='fas fa-envelope' style='color:#fff'></span></button><button style='background:blue'><span style='color:white'class='fa fa-edit'></span></button><button style='background:yellow'><span style='color:white' class='fa fa-check-circle'></span></button>"
+            </script>
+              <script>
+
+var toolbarOptions = [
+  ['bold', 'italic', 'underline', 'strike', 'link'],        // toggled buttons
+  ['blockquote', 'code-block'],
+  ['video', 'formula', 'image'],
+  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+  [{ 'direction': 'rtl' }],                         // text direction
+
+  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  [{ 'font': [] }],
+  [{ 'align': [] }],
+
+  ['clean']                                         // remove formatting button
+];
+            var options = {
+  theme: 'snow',
+  modules: {
+    toolbar: toolbarOptions     
+  },
+  placeholder: 'Enter your body here..'
+ }
+ var container = document.getElementById('customQuill');
+var editor = new Quill(container, options);
+ editor_content = editor.container.innerHtml;
+   $("#mailbutton").click(function(){
+                $.post("/sendMail",{
+                    to:$("#emailPop").val(),
+                    from:"damon.satterfield@ethereal.email",
+                    subject:$("#subject").val(),
+                    text:editor.container.firstChild.innerText
+                },
+                function(data,status){
+                    console.log("data " + data + "status " + status);
+                })
+            });
+            
+$("#status").change(function(){
+         selectedStatus = $(this).children("option:selected").val();
+    });
+    $("#rolesel").change(function(){
+         selectedRole = $(this).children("option:selected").val();
+    });
+    function validate() {
+
+            var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+            //var address = document.getElementById[email].value;
+            if (reg.test($("#username").val()) == false) 
+            {
+                alert('Invalid Email Address');
+                return (false);
+            }
+            else return true
+ }
+      $("#editsubmit").click(function(){
+          if(validate()==true){
+            $.post("/editUserList",{
+                email:$("#username").val(),
+                phone:$("#phone").val(),
+                city:$("#city").val(),
+                status:selectedStatus,
+                role:selectedRole
+            },
+            function(data,status){
+                if(status=="success") $("#refresh").click();
+            }
+            );}
+            
+      });
+
+        $("#statusFilter").change(function(){
+              statusFilter=$(this).children("option:selected").val();
+                      });
+         $("#roleFilter").change(function(){
+              roleFilter=$(this).children("option:selected").val();
+                      });
+            </script>

@@ -1,0 +1,20 @@
+
+<%# <form action="/sendMail" method="post"> %>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" id="modal">
+  <div class="modal-dialog modal-lg" >
+    <div class="modal-content">
+    <hr>
+    <label class="control-label col-md-6" for="email"><dt>Send Reminder Mail</dt></label>
+    <label class="control-label col-sm-2" for="email">To:</label>
+    <input type="email" name="email" class="form-control" id="emailPop" readonly="">
+    <label class="control-label col-sm-2">Subject:</label>
+    <input type="text" class="form-control" name="subject" id="subject" placeholder="">
+    <div class="container">
+            <div id="customQuill" style="height:400px">
+            </div>
+          </div>
+<button class="btn btn-default" type="submit" id="mailbutton" style="float:right">Send</button>
+    <%# </form> %>
+    </div>
+  </div>
+</div>
